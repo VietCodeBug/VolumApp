@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Floating Volume</string>
+    <string name="app_subtitle">Nút âm lượng nổi độc lập thay thế phím cứng</string>
+
+    <!-- Notification -->
+    <string name="notif_channel_name">Trạng thái Nút Âm Lượng Nổi</string>
+    <string name="notif_channel_desc">Thông báo duy trì nút âm lượng nổi hoạt động khi đóng ứng dụng</string>
+    <string name="notif_title">Floating Volume</string>
+    <string name="notif_content_active">Nút âm lượng nổi đang hoạt động</string>
+    <string name="notif_action_stop">Tắt</string>
+    <string name="notif_action_open">Cài đặt</string>
+
+    <!-- Main Screen Status & Master Toggle -->
+    <string name="status_active_title">Đang hoạt động độc lập</string>
+    <string name="status_active_desc">Nút nổi đang hiển thị. Bạn có thể vuốt đóng ứng dụng khỏi Recent Apps mà nút vẫn giữ nguyên.</string>
+    <string name="status_inactive_title">Đang tắt</string>
+    <string name="status_inactive_desc">Cấp quyền hiển thị trên ứng dụng khác và bấm Bật để hiển thị nút âm lượng nổi.</string>
+    <string name="status_permission_needed_title">Cần cấp quyền hiển thị nổi</string>
+    <string name="status_permission_needed_desc">Vui lòng cấp quyền "Hiển thị trên ứng dụng khác" để nút âm lượng có thể xuất hiện trên màn hình.</string>
+    <string name="btn_enable_overlay">Bật nút âm lượng nổi</string>
+    <string name="btn_disable_overlay">Tắt nút âm lượng nổi</string>
+
+    <!-- Permissions & Battery Section -->
+    <string name="section_permissions_title">Quyền &amp; Duy trì chạy nền</string>
+    <string name="perm_overlay_title">Hiển thị trên ứng dụng khác</string>
+    <string name="perm_overlay_granted">Đã cấp quyền (Sẵn sàng hiển thị)</string>
+    <string name="perm_overlay_denied">Chưa cấp quyền (Bắt buộc để hiện nút nổi)</string>
+    <string name="btn_grant_overlay">Mở trang cấp quyền</string>
+    <string name="btn_manage_overlay">Cài đặt quyền</string>
+
+    <string name="perm_notif_title">Thông báo trạng thái (Android 13+)</string>
+    <string name="perm_notif_granted">Đã bật (Hiện nút Tắt nhanh trên thanh thông báo)</string>
+    <string name="perm_notif_denied">Đã tắt (Nút nổi vẫn chạy nhưng không hiện nút Tắt trên thông báo)</string>
+    <string name="btn_grant_notif">Cho phép</string>
+
+    <string name="battery_opt_title">Chạy nền &amp; Tối ưu hóa pin</string>
+    <string name="battery_opt_unrestricted">Pin: Không hạn chế (Tối ưu cho nút nổi)</string>
+    <string name="battery_opt_restricted">Pin: Đang tối ưu hóa (Nên chuyển sang "Không hạn chế")</string>
+    <string name="battery_opt_guide">Để tránh hệ thống tự tắt nút nổi khi dùng lâu hoặc khi vuốt Recent Apps trên các máy Xiaomi/Samsung/OPPO/Vivo, hãy mở Thông tin ứng dụng → Pin → Chọn "Không hạn chế" (Unrestricted) và bật "Tự khởi chạy".</string>
+    <string name="btn_open_battery_settings">Cài đặt Pin</string>
+    <string name="btn_open_app_details">Mở Thông tin ứng dụng</string>
+
+    <!-- Direct Device Volume Preview Card -->
+    <string name="section_current_volume_title">Âm lượng Media hiện tại của máy</string>
+    <string name="btn_test_vol_down">Giảm (−)</string>
+    <string name="btn_test_vol_up">Tăng (+)</string>
+    <string name="btn_test_mute">Tắt tiếng</string>
+    <string name="btn_test_unmute">Bật tiếng</string>
+
+    <!-- Overlay Customization Section -->
+    <string name="section_customization_title">Tùy chỉnh nút âm lượng nổi</string>
+    <string name="mode_selection_label">Chế độ hiển thị mặc định</string>
+    <string name="mode_compact_bar">Thanh nhỏ (+ / −)</string>
+    <string name="mode_compact_bar_desc">Bấm trực tiếp + hoặc − ở cạnh màn hình, nhấn giữ để chỉnh liên tục</string>
+    <string name="mode_collapsed_bubble">Bong bóng loa</string>
+    <string name="mode_collapsed_bubble_desc">Thu gọn thành biểu tượng loa; chạm để mở bảng trượt và tự thu gọn sau 4 giây</string>
+
+    <string name="setting_snap_to_edge_title">Tự động hít vào cạnh màn hình</string>
+    <string name="setting_snap_to_edge_desc">Sau khi kéo thả, nút nổi tự động bám vào mép trái hoặc phải gần nhất</string>
+
+    <string name="setting_size_label">Kích thước nút nổi: %1$d%%</string>
+    <string name="setting_opacity_label">Độ đậm (Độ rõ hiển thị): %1$d%%</string>
+    <string name="setting_position_label">Vị trí đã lưu: X = %1$d px, Y = %2$d px</string>
+    <string name="btn_reset_position">Đặt lại vị trí mặc định (Cạnh phải)</string>
+    <string name="btn_expand_panel_now">Mở bảng điều khiển đầy đủ ngay</string>
+
+    <!-- System Limitations & Verification Guide -->
+    <string name="section_limitations_title">Lưu ý hoạt động &amp; Giới hạn Android</string>
+    <string name="limitation_item_recents">• Vuốt khỏi Recent Apps: Service chạy độc lập (stopWithTask=false) nên nút nổi tiếp tục hiển thị và điều chỉnh được âm lượng.</string>
+    <string name="limitation_item_low_ram">• Hệ thống thu hồi bộ nhớ (Low RAM): Android sẽ tự động phục hồi nút nổi qua cơ chế START_STICKY khi có đủ tài nguyên.</string>
+    <string name="limitation_item_force_stop">• Buộc dừng (Force Stop) hoặc bấm Tắt: Ứng dụng tôn trọng tuyệt đối quyết định của bạn và dừng hoàn toàn cho đến khi bạn mở lại.</string>
+    <string name="limitation_item_rom">• Quản lý nền theo hãng máy (ROM): Một số máy khóa chặt ứng dụng nền; hãy đặt Pin ở mức "Không hạn chế" hoặc khóa app trong đa nhiệm nếu ROM yêu cầu.</string>
+
+    <string name="section_checklist_title">Hướng dẫn tự kiểm tra nhanh</string>
+    <string name="checklist_step_1">1. Bật nút nổi, mở YouTube hoặc trình phát nhạc và bấm + / − hoặc kéo thanh trượt.</string>
+    <string name="checklist_step_2">2. Nhấn giữ nút + hoặc − để kiểm tra tăng/giảm liên tục và nhả tay để dừng ngay.</string>
+    <string name="checklist_step_3">3. Mở danh sách đa nhiệm (Recent Apps) và vuốt xóa Floating Volume, sau đó bấm tiếp nút nổi.</string>
+    <string name="checklist_step_4">4. Xoay ngang/dọc màn hình hoặc bấm nút "Tắt" trực tiếp từ thanh thông báo.</string>
+
+    <!-- Overlay Content Descriptions -->
+    <string name="cd_volume_up">Tăng âm lượng media</string>
+    <string name="cd_volume_down">Giảm âm lượng media</string>
+    <string name="cd_volume_bubble">Bong bóng âm lượng nổi, chạm để mở bảng điều khiển</string>
+    <string name="cd_expand_panel">Mở bảng thanh trượt âm lượng</string>
+    <string name="cd_collapse_panel">Thu gọn bảng điều khiển</string>
+    <string name="cd_mute_toggle">Tắt hoặc bật tiếng nhanh</string>
+    <string name="overlay_panel_title">Âm lượng Media</string>
+    <string name="overlay_bubble_mode_btn">Thu gọn</string>
+    <string name="overlay_mute_btn">Tắt tiếng</string>
+    <string name="overlay_unmute_btn">Mở tiếng</string>
+</resources>

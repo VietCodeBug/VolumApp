@@ -1,0 +1,6 @@
+{
+  "summary":  "Kế hoạch triển khai chi tiết cho ứng dụng Android Floating Volume sử dụng Foreground Service độc lập và WindowManager Overlay, đảm bảo hoạt động ngay cả khi vuốt đóng ứng dụng khỏi Recent Apps.",
+  "updatedAt":  "2026-10-26T07:22:14.266286965Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

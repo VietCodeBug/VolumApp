@@ -1,0 +1,6 @@
+{
+  "name": "Floating Volume",
+  "description": "Nút âm lượng nổi độc lập hoạt động qua Foreground Service, thay thế phím âm lượng vật lý bị hỏng mà không chứa quảng cáo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
