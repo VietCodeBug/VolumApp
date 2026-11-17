@@ -93,6 +93,14 @@ class OverlayViewHolder(
     private lateinit var panelModeSwitchButton: TextView
 
     private var isUserDraggingSeekBar = false
+    private var isAwaitingSeekBarVerification = false
+    private var pendingSeekBarVolume: Int? = null
+
+    // Keep a user's drag position visible until Android has had a chance to apply the final command.
+    private val verifySeekBarVolumeRunnable = Runnable {
+        isAwaitingSeekBarVerification = false
+        updateVolumeUi(volumeController.refreshVolumeState())
+    }
 
     // Hold-to-repeat state
     private var activeRepeatDelta: Int = 0
@@ -517,21 +525,35 @@ class OverlayViewHolder(
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     if (fromUser) {
-                        scheduleAutoCollapse()
-                        val updated = volumeController.setExactVolume(progress)
-                        updateVolumeTextAndIcons(updated)
+                        // The gesture is a preview. Rapid calls to AudioManager while dragging
+                        // can be dropped or delayed by vendor audio services.
+                        pendingSeekBarVolume = progress
+                        val current = volumeController.volumeState.value
+                        updateVolumeTextAndIcons(current.copy(currentVolume = progress))
                     }
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
                     isUserDraggingSeekBar = true
-                    scheduleAutoCollapse()
+                    isAwaitingSeekBarVerification = false
+                    pendingSeekBarVolume = seekBar?.progress
+                    mainHandler.removeCallbacks(verifySeekBarVolumeRunnable)
+                    cancelAutoCollapse()
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    val target = pendingSeekBarVolume ?: seekBar?.progress
+                    pendingSeekBarVolume = null
                     isUserDraggingSeekBar = false
+                    if (target != null) {
+                        // Apply the final value once, then verify actual system volume after
+                        // a short delay rather than immediately snapping to a stale read.
+                        isAwaitingSeekBarVerification = true
+                        volumeController.setExactVolume(target)
+                        mainHandler.removeCallbacks(verifySeekBarVolumeRunnable)
+                        mainHandler.postDelayed(verifySeekBarVolumeRunnable, 250L)
+                    }
                     scheduleAutoCollapse()
-                    updateVolumeUi(volumeController.refreshVolumeState())
                 }
             })
         }
@@ -952,6 +974,7 @@ class OverlayViewHolder(
 
     fun updateVolumeUi(snapshot: VolumeSnapshot) {
         if (!::compactVolumeText.isInitialized) return
+        if (isUserDraggingSeekBar || isAwaitingSeekBarVerification) return
         updateVolumeTextAndIcons(snapshot)
         if (!isUserDraggingSeekBar) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -1039,6 +1062,10 @@ class OverlayViewHolder(
     fun detachFromWindow() {
         stopHoldRepeat()
         cancelAutoCollapse()
+        mainHandler.removeCallbacks(verifySeekBarVolumeRunnable)
+        isUserDraggingSeekBar = false
+        isAwaitingSeekBarVerification = false
+        pendingSeekBarVolume = null
         if (!isAttached) return
         runCatching {
             windowManager.removeViewImmediate(rootContainer)
@@ -1055,6 +1082,10 @@ class OverlayViewHolder(
         rootContainer.alpha = currentConfig.alphaValue
 
         if (sizeChanged) {
+            mainHandler.removeCallbacks(verifySeekBarVolumeRunnable)
+            isUserDraggingSeekBar = false
+            isAwaitingSeekBarVerification = false
+            pendingSeekBarVolume = null
             buildOverlayViewTree()
         } else if (modeChanged) {
             applyVisibilityForCurrentMode()

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.os.Build
+import android.util.Log
 import com.example.data.OverlayPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -118,13 +119,23 @@ class DeviceVolumeController(
 
     private fun setStreamVolumeInternal(target: Int, minVol: Int, maxVol: Int): VolumeSnapshot {
         val safeTarget = target.coerceIn(minVol, maxVol)
-        runCatching {
+        val result = runCatching {
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, safeTarget, 0)
         }
-        if (safeTarget > minVol) {
-            preferences.saveLastNonZeroVolume(safeTarget)
+        result.onFailure { error ->
+            Log.e(TAG, "setStreamVolume failed for target=$safeTarget", error)
         }
-        return refreshVolumeState()
+        val observed = refreshVolumeState()
+        if (result.isSuccess && observed.currentVolume != safeTarget) {
+            // A vendor audio service may reject or delay a background/overlay volume request
+            // without throwing. A follow-up read is done by the overlay after the gesture.
+            Log.w(
+                TAG,
+                "Volume request not yet reflected: target=$safeTarget, observed=${observed.currentVolume}"
+            )
+        }
+        // Persist the observed value (readCurrentSnapshot does this), not a rejected target.
+        return observed
     }
 
     fun startListeningVolumeChanges() {
@@ -152,6 +163,7 @@ class DeviceVolumeController(
     }
 
     companion object {
+        private const val TAG = "FloatingVolumeAudio"
         const val VOLUME_CHANGED_ACTION = "android.media.VOLUME_CHANGED_ACTION"
     }
 }
