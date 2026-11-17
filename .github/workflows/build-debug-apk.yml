@@ -28,12 +28,13 @@ jobs:
         with:
           gradle-version: '9.3.1'
 
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android API 36.1
         run: |
-          sdkmanager --install "platforms;android-36.1" "build-tools;36.0.0"
+          # GitHub-hosted ubuntu-latest has Android cmdline-tools already installed.
+          # Avoid setup-android@v3, which attempts to install the retired 'tools' package.
+          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" --install "platforms;android-36.1" "build-tools;36.0.0"
 
       - name: Create temporary debug signing key
         run: |
