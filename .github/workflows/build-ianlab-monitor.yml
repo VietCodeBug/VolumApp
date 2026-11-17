@@ -1,0 +1,41 @@
+name: Build IANLAB Monitor Windows
+on:
+  push:
+    branches: [experiment/ianlab-monitor-build-20261117]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Publish portable Windows x64
+        shell: pwsh
+        run: .\ianlab-monitor\build-windows.ps1
+      - name: Upload portable ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: IANLAB-Monitor-win-x64
+          path: ianlab-monitor/dist/IANLAB-Monitor-win-x64.zip
+          if-no-files-found: error
+
+      - name: Publish experimental release with Windows ZIP
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ianlab-monitor-v0.1.0-preview
+          target_commitish: experiment/ianlab-monitor-build-20261117
+          name: IANLAB Monitor v0.1.0 — Windows lightweight preview
+          prerelease: true
+          make_latest: false
+          files: ianlab-monitor/dist/IANLAB-Monitor-win-x64.zip
+          fail_on_unmatched_files: true
+          body: |
+            Experimental native WinForms desktop overlay. Self-contained portable Windows x64 ZIP.
+            Tested by CI build only. Temperatures and fan RPM depend on hardware sensors.
+            Adapter voltage (20V DC) is nameplate nominal, not measured input voltage.
+            This is hosted in an isolated build branch of VolumApp; Android main is unaffected.
